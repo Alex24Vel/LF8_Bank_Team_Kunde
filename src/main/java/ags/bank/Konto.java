@@ -1,7 +1,5 @@
 package ags.bank;
 
-import java.util.Random;
-
 public class Konto {
     private int kontoNummer;
     private double kontostand;
@@ -17,10 +15,6 @@ public class Konto {
         return kontoNummer;
     }
 
-    public void setKontoNummer(int kontoNummer) {
-        this.kontoNummer = kontoNummer;
-    }
-
     public double getKontostand() {
         return kontostand;
     }
@@ -30,15 +24,20 @@ public class Konto {
     }
 
     public void einzahlen(double betrag) {
+        if (betrag <= 0) {
+            throw new IllegalArgumentException("Betrag muss positiv sein");
+        }
         kontostand += betrag;
     }
 
     public boolean auszahlen(double betrag) {
+        if (betrag <= 0) {
+            throw new IllegalArgumentException("Betrag muss positiv sein");
+        }
         if (betrag <= kontostand) {
             kontostand -= betrag;
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 }
