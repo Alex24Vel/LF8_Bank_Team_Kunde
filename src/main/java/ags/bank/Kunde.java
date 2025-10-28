@@ -4,19 +4,17 @@ import java.util.ArrayList;
 
 public class Kunde extends Person {
     private int kundennummer;
-    private ArrayList<Konto> kontos;
-    private Filiale filiale;
     private Mitarbeiter betreuer;
+    private ArrayList<Konto> kontos;
 
     public final int MAX_KONTEN_ANZAHL = 5;
 
     public Kunde(String vorname, String nachname, String strasse, String hausNummer, String email,
-                 int kundennummer, ArrayList<Konto> kontos, Filiale filiale, Mitarbeiter betreuer) {
-        super(vorname, nachname, strasse, hausNummer, email);
+                 int kundennummer, Mitarbeiter betreuer, ArrayList<Konto> kontos, Filiale filiale) {
+        super(vorname, nachname, strasse, hausNummer, email, filiale);
         this.kundennummer = kundennummer;
-        this.kontos = kontos;
-        this.filiale = filiale;
         this.betreuer = betreuer;
+        this.kontos = kontos;
     }
 
     // Getters & Setters
@@ -31,12 +29,6 @@ public class Kunde extends Person {
     }
     public void setKontos(ArrayList<Konto> kontos) {
         this.kontos = kontos;
-    }
-    public Filiale getFiliale() {
-        return filiale;
-    }
-    public void setFiliale(Filiale filiale) {
-        this.filiale = filiale;
     }
     public Mitarbeiter getBetreuer() {
         return betreuer;
