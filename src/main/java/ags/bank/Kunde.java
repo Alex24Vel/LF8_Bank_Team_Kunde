@@ -114,4 +114,63 @@ public class Kunde extends Person {
         }
         return summe;
     }
+
+    // ========== PHASE 2 METHODS ==========
+
+    /**
+     * Sucht ein Konto anhand der Kontonummer
+     *
+     * @param kontoNummer Die zu suchende Kontonummer
+     * @return Das gefundene Konto oder null wenn nicht gefunden
+     */
+    public Konto findKontoByNummer(int kontoNummer) {
+        for (Konto konto : kontos) {
+            if (konto.getKontoNummer() == kontoNummer) {
+                return konto;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Sucht ein Konto anhand der IBAN
+     *
+     * @param iban Die zu suchende IBAN
+     * @return Das gefundene Konto oder null wenn nicht gefunden
+     */
+    public Konto findKontoByIBAN(String iban) {
+        if (iban == null) {
+            return null;
+        }
+
+        for (Konto konto : kontos) {
+            if (iban.equals(konto.getIBAN())) {
+                return konto;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Prüft ob der Kunde Guthaben auf mindestens einem Konto hat
+     *
+     * @return true wenn mindestens ein Konto Guthaben > 0 hat, sonst false
+     */
+    public boolean hatGuthaben() {
+        for (Konto konto : kontos) {
+            if (konto.getKontostand() > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Gibt die Anzahl der Kontos des Kunden zurück
+     *
+     * @return Anzahl der Kontos
+     */
+    public int getAnzahlKontos() {
+        return kontos.size();
+    }
 }

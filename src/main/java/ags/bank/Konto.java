@@ -40,4 +40,51 @@ public class Konto {
         }
         return false;
     }
+
+    // ========== PHASE 2 METHODS ==========
+
+    /**
+     * Überweist Geld von diesem Konto auf ein Zielkonto
+     *
+     * @param zielKonto Das Zielkonto
+     * @param betrag Der zu überweisende Betrag
+     * @return true wenn erfolgreich, false wenn unzureichende Deckung
+     * @throws IllegalArgumentException wenn zielKonto null, betrag <= 0, oder
+     *     Überweisung an sich selbst
+     */
+    public boolean ueberweisen(Konto zielKonto, double betrag) {
+        if (zielKonto == null) {
+            throw new IllegalArgumentException("Zielkonto darf nicht null sein");
+        }
+        if (betrag <= 0) {
+            throw new IllegalArgumentException("Betrag muss positiv sein");
+        }
+        if (zielKonto == this) {
+            throw new IllegalArgumentException(
+                    "Überweisung an sich selbst nicht möglich"
+            );
+        }
+
+        // Prüfen ob genug Geld vorhanden
+        if (this.auszahlen(betrag)) {
+            zielKonto.einzahlen(betrag);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Gibt formatierte Kontoinformationen zurück
+     *
+     * @return String mit Kontonummer, IBAN und aktuellem Kontostand
+     */
+    public String getKontoInfo() {
+        return String.format(
+                "Konto %d | IBAN: %s | Kontostand: %.2f EUR",
+                kontoNummer,
+                IBAN,
+                kontostand
+        );
+    }
 }

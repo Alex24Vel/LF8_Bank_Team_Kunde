@@ -102,4 +102,136 @@ public class Filiale {
 
         return alleKontos;
     }
+
+    // ========== PHASE 2 METHODS ==========
+
+    /**
+     * Sucht einen Kunden in der Filiale anhand der Kundennummer
+     *
+     * @param kundennummer Die zu suchende Kundennummer
+     * @return Der gefundene Kunde oder null wenn nicht gefunden
+     */
+    public Kunde findKundeByNummer(int kundennummer) {
+        for (Kunde kunde : kundenListe) {
+            if (kunde.getKundennummer() == kundennummer) {
+                return kunde;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Sucht einen Mitarbeiter in der Filiale anhand der Mitarbeiternummer
+     *
+     * @param mitarbeiterNummer Die zu suchende Mitarbeiternummer
+     * @return Der gefundene Mitarbeiter oder null wenn nicht gefunden
+     */
+    public Mitarbeiter findMitarbeiterByNummer(int mitarbeiterNummer) {
+        for (Mitarbeiter mitarbeiter : mitarbeiterListe) {
+            if (mitarbeiter.getMitarbeiterNummer() == mitarbeiterNummer) {
+                return mitarbeiter;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Berechnet das Gesamtvermögen aller Kunden in dieser Filiale
+     *
+     * @return Summe aller Kontostände aller Kunden
+     */
+    public double getGesamtFilialVermoegen() {
+        double summe = 0;
+        for (Kunde kunde : kundenListe) {
+            summe += kunde.getGesamtKontostand();
+        }
+        return summe;
+    }
+
+    /**
+     * Findet den Mitarbeiter mit den meisten Kunden
+     *
+     * @return Mitarbeiter mit den meisten Kunden oder null wenn keine
+     *     Mitarbeiter
+     */
+    public Mitarbeiter getMitarbeiterMitMeistenKunden() {
+        if (mitarbeiterListe.isEmpty()) {
+            return null;
+        }
+
+        Mitarbeiter mitMeisten = mitarbeiterListe.get(0);
+        int maxKunden = mitMeisten.getAnzahlKunden();
+
+        for (Mitarbeiter mitarbeiter : mitarbeiterListe) {
+            int anzahl = mitarbeiter.getAnzahlKunden();
+            if (anzahl > maxKunden) {
+                maxKunden = anzahl;
+                mitMeisten = mitarbeiter;
+            }
+        }
+
+        return mitMeisten;
+    }
+
+    /**
+     * Findet den Mitarbeiter mit den wenigsten Kunden
+     *
+     * @return Mitarbeiter mit den wenigsten Kunden oder null wenn keine
+     *     Mitarbeiter
+     */
+    public Mitarbeiter getMitarbeiterMitWenigstenKunden() {
+        if (mitarbeiterListe.isEmpty()) {
+            return null;
+        }
+
+        Mitarbeiter mitWenigsten = mitarbeiterListe.get(0);
+        int minKunden = mitWenigsten.getAnzahlKunden();
+
+        for (Mitarbeiter mitarbeiter : mitarbeiterListe) {
+            int anzahl = mitarbeiter.getAnzahlKunden();
+            if (anzahl < minKunden) {
+                minKunden = anzahl;
+                mitWenigsten = mitarbeiter;
+            }
+        }
+
+        return mitWenigsten;
+    }
+
+    /**
+     * Verteilt Kunden gleichmäßig unter allen Mitarbeitern der Filiale
+     * Kunden werden vom Mitarbeiter mit den meisten zu dem mit den wenigsten
+     * verschoben, bis die Verteilung ausgeglichen ist
+     */
+    public void kundenAusgleichen() {
+        if (mitarbeiterListe.size() < 2) {
+            return; // Ausgleich nur sinnvoll bei mindestens 2 Mitarbeitern
+        }
+
+        boolean ausgeglichen = false;
+
+        while (!ausgeglichen) {
+            Mitarbeiter mitMeisten = getMitarbeiterMitMeistenKunden();
+            Mitarbeiter mitWenigsten = getMitarbeiterMitWenigstenKunden();
+
+            int differenz =
+                    mitMeisten.getAnzahlKunden() - mitWenigsten.getAnzahlKunden();
+
+            // Wenn Differenz <= 1, ist es ausgeglichen genug
+            if (differenz <= 1) {
+                ausgeglichen = true;
+            } else {
+                // Verschiebe einen Kunden vom Mitarbeiter mit den meisten zum
+                // Mitarbeiter mit den wenigsten
+                ArrayList<Kunde> kundenVonMeisten = mitMeisten.getKundenListe();
+
+                if (!kundenVonMeisten.isEmpty()) {
+                    Kunde zuVerschieben = kundenVonMeisten.get(0);
+                    zuVerschieben.changeBetreuer(mitWenigsten);
+                } else {
+                    ausgeglichen = true; // Sicherheitsabbruch
+                }
+            }
+        }
+    }
 }

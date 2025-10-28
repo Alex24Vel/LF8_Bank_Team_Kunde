@@ -96,4 +96,50 @@ public class Mitarbeiter extends Person {
     public int getAnzahlKunden() {
         return kundenListe.size();
     }
+
+    // ========== PHASE 2 METHODS ==========
+
+    /**
+     * Sucht einen Kunden anhand der Kundennummer
+     *
+     * @param kundennummer Die zu suchende Kundennummer
+     * @return Der gefundene Kunde oder null wenn nicht gefunden
+     */
+    public Kunde findKundeByNummer(int kundennummer) {
+        for (Kunde kunde : kundenListe) {
+            if (kunde.getKundennummer() == kundennummer) {
+                return kunde;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Berechnet die Gesamtsumme aller verwalteten Kundenvermögen
+     *
+     * @return Gesamtsumme aller Kontostände der betreuten Kunden
+     */
+    public double getGesamtVerwaltetesSumme() {
+        double summe = 0;
+        for (Kunde kunde : kundenListe) {
+            summe += kunde.getGesamtKontostand();
+        }
+        return summe;
+    }
+
+    /**
+     * Prüft ob der Mitarbeiter weitere Kunden aufnehmen kann
+     *
+     * @param maxKunden Maximale Anzahl Kunden pro Mitarbeiter
+     * @return true wenn Anzahl aktueller Kunden < maxKunden, sonst false
+     * @throws IllegalArgumentException wenn maxKunden <= 0
+     */
+    public boolean kannNeueKundenAufnehmen(int maxKunden) {
+        if (maxKunden <= 0) {
+            throw new IllegalArgumentException(
+                    "maxKunden muss größer als 0 sein"
+            );
+        }
+        return kundenListe.size() < maxKunden;
+    }
 }
